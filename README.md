@@ -1,115 +1,78 @@
-<h1 align="center">Workflow Approvals for Claude Code</h1>
+# Workflow Approvals for Claude Code
 
-<p align="center">
-  <strong>The open-source workflow approval system that is just a database and Claude Code.</strong>
-</p>
+Know who is waiting, which approval is late and why each decision was made. An MIT-licensed database and command set for internal requests. Works with Claude Code, Codex, OpenCode or Cursor.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free. Try the demo and import a Kissflow report CSV. | Your fields, approval rules, history, web front end or different stack. | Installed, connected and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
+| [Quick start](#quick-start) | [Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=kissflow&utm_medium=customise) | [Book a call](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=kissflow&utm_medium=managed) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Kissflow data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=kissflow">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/kissflow?utm_source=github&utm_medium=readme&utm_campaign=kissflow">How it works</a></td>
-  </tr>
-</table>
+## The weekly operations meeting
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-kissflow">Instead of Kissflow</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Workflow Approvals for Claude Code does the job you pay Kissflow for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Kissflow dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Kissflow per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=kissflow).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+Five rituals: review incoming requests, check the evidence, record each approval, chase overdue decisions and review the completed work. The fictional Harbour Operations demo has an overdue client handover, an inactive draft, a policy exception and an overdue retention review.
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later, on Windows or Linux:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/workflow-approvals-for-claude-code.git
 cd workflow-approvals-for-claude-code
 npm install
 npm run demo
+npm test
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+PGlite runs locally in .data/db. DATABASE_URL selects Postgres 15 or later with verified TLS. Local mode supports one process. For real records use a fresh DATA_DIR, migrate without seed and define your workflows. Keep demo records separate. Shared use requires authenticated operators, restricted database roles and protected backups. Actor names are attribution, not authentication. This base does not send alerts or run background jobs.
 
-### Use it with your own Postgres or Supabase
+There are 28 CLI commands including help and 29 slash recipes including /customise and /new-view. [CLI reference](docs/cli.md).
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## Approval rules that preserve history
 
-## The commands
+A workflow freezes when published. Submission snapshots its steps. The next step opens only after approval and receives its own calendar-day deadline. Evidence and a note are required. A requester cannot decide their own request. Rejection cancels later steps. Completed tasks and activity cannot be edited through the tool. A database owner can still change the software, so this is not a tamper-proof archive or a signature service.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+## Ten questions beyond a fixed report
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+Kissflow already offers configurable reports. These questions demonstrate shipped queries, not an unsupported claim that its product cannot answer them.
 
-## Instead of kissflow
+1. Which handovers are waiting on the same reviewer? workload
+2. Which approval steps have the oldest pending work? bottlenecks
+3. Which requests have crossed their current deadline? overdue
+4. Which draft handovers have been untouched for a week? attention
+5. Who approved each step and what evidence did they record? decisions
+6. Which imported requests still need reconciliation? compliance
+7. Which reviewer is also the person who raised the request? compliance
+8. Which processes need their data-retention purpose reviewed? compliance
+9. How long did locally completed approvals take? cycle-times
+10. What changed between the original request and the final decision? request
 
-<!-- TODO(author): how to bring data across from Kissflow; link docs/replace-kissflow.md -->
+## Your first hour: ten things to ask for
 
-## Architecture
+1. Put our business name and colours on the decision pack.
+2. Show who has overdue approvals.
+3. Read the handover evidence before deciding.
+4. Draft a follow-up for the current reviewer.
+5. Check our export without saving it.
+6. Map our report headings and reconcile imported records.
+7. Define our approval sequence and publish it for use.
+8. Submit a known pending request and test each decision.
+9. Add our request category with /customise.
+10. Add a weekly owner report with /new-view.
 
-```
-workflow-approvals-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
+## Paperwork and views
 
-## Built for coding agents
+brand.json controls logo, colours and business name. npm run docs creates decision records and workflow review packs. npm run view creates the approval desk and workflow register. Drafts stay in drafts/. Protect these files as private business records.
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+[Record checks](docs/compliance.md) distinguish privacy review reminders from internal approval policy. [Why no front end](docs/why-no-front-end.md) explains mobile, offline and interactive needs. Nothing sends, signs a regulated approval, moves money or calls a vendor system.
 
-## Contributing
+## Move from Kissflow
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+[The replacement guide](docs/replace-kissflow.md) explains the flat CSV import, optional heading mapping, test run, repeat imports and reconciliation. All source fields are preserved. Imported records require review. Workflow designs, attachments, integrations, identities and historical decisions require a separate migration. This is an internal approval base, not the whole Kissflow application platform.
 
-## Want it installed and run for you?
+## Verification
 
-Enterprise DNA installs Workflow Approvals for Claude Code for your business, migrates your Kissflow data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+npm test uses a temporary database, exercises every command and checks sequential decisions, rejection, self-approval refusal, immutable history, dry runs, rollback, repeat imports, custom headings, ambiguity, branded documents and JSON exports. CI defines Windows and Linux runs plus an empty disposable Postgres database. Local verification results are recorded in docs/verification.md.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=kissflow)
-- Read more: [enterprisedna.co/omni/instead-of/kissflow](https://enterprisedna.co/omni/instead-of/kissflow?utm_source=github&utm_medium=readme&utm_campaign=kissflow)
-
-## License
-
-MIT. Copyright (c) 2026 Enterprise DNA.
+MIT licence. Not affiliated with Kissflow or Anthropic. Hosting and coding-agent usage carry their own costs. [Research](docs/research.md). [Book 30 minutes with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=kissflow&utm_medium=readme).

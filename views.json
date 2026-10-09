@@ -1,13 +1,30 @@
 [
   {
-    "name": "week",
-    "title": "This week",
-    "subtitle": "Workflow Approvals for Claude Code: what needs attention, rendered by npm run view",
+    "name": "approval-desk",
+    "title": "Approval desk",
+    "subtitle": "Pending decisions, overdue work and owner workload",
     "sections": [
       {
+        "title": "Pending approvals",
+        "sql": "select title,workflow,step,assignee,due_at,overdue from approval_inbox order by due_at"
+      },
+      {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select title,issue,owner,due_at from workflow_attention order by issue,title"
+      },
+      {
+        "title": "Workload",
+        "sql": "select assignee,count(*) as pending,count(*) filter(where overdue) as overdue from approval_inbox group by assignee order by pending desc"
+      }
+    ]
+  },
+  {
+    "name": "workflow-register",
+    "title": "Workflow register",
+    "sections": [
+      {
+        "title": "Volume and review dates",
+        "sql": "select * from workflow_summary order by name"
       }
     ]
   }

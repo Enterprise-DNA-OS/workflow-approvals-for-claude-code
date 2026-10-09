@@ -1,11 +1,42 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "decision-pack",
+    "title": "Request decision record",
+    "for_each": "select id,title as name from requests",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Request",
+        "sql": "select title,requester,detail,state,source_status,submitted_at,closed_at from requests where id=$1"
+      },
+      {
+        "title": "Approval steps",
+        "sql": "select position,name,assignee,state,due_at,decided_by,evidence,note,decided_at from tasks where request_id=$1 order by position"
+      },
+      {
+        "title": "History",
+        "sql": "select actor,action,detail,created_at from activity where request_id=$1 order by created_at,id"
+      }
+    ]
+  },
+  {
+    "name": "process-review",
+    "title": "Workflow and retention review",
+    "for_each": "select id,name from workflows",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Purpose and owner",
+        "sql": "select name,owner,purpose,review_due,published from workflows where id=$1"
+      },
+      {
+        "title": "Approval rules",
+        "sql": "select position,name,assignee,due_days from step_definitions where workflow_id=$1 order by position"
+      },
+      {
+        "title": "Open and imported requests",
+        "sql": "select title,requester,state,source_status from requests where workflow_id=$1 and state in ('draft','active','imported') order by title"
+      }
     ]
   }
 ]

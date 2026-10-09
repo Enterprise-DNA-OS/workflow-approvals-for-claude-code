@@ -1,43 +1,45 @@
-# Workflow Approvals for Claude Code: operating instructions
+# Workflow Approvals for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+An internal request and approval record system for one business. Demo records are fictional. The operator owns decisions. Read from the CLI before answering and read full history before changing a request. Never invent decisions, evidence or identities.
 
-## Who this is for
+Actor names are attribution, not authentication. Only record an approval the assigned person actually gave. Never turn an agent recommendation into a human approval. The tool enforces sequence and blocks requester self-approval. Reassignment needs a reason. Published process definitions are immutable. Imported source status is context, not local approval. Read docs/replace-kissflow.md before import and docs/compliance.md before discussing record checks.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+Local mode is single-process. Shared Postgres requires restricted roles, operator authentication and protected backups. Never expose an owner connection to a browser. No external sends, vendor calls, deletion commands or background workers. Drafts stay in drafts/.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+## Recurring jobs
 
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| Review process owners, volumes and retention review dates | /workflows |
+| Read the approval sequence | /steps |
+| Review the request register | /requests |
+| Review decisions waiting for an owner | /inbox |
+| Chase overdue approvals | /overdue |
+| Balance pending decisions by reviewer | /workload |
+| Find the process steps holding work | /bottlenecks |
+| Review completed request turnaround | /cycle-times |
+| Read decisions and their evidence | /decisions |
+| Find overdue approvals, stale drafts and unreviewed imports | /attention |
+| Check retention reviews and internal approval controls | /compliance |
+| Read a request with its steps and history | /request |
+| Read the append-only request history | /history |
+| Prepare the weekly approval meeting | /weekly-review |
+| Define a new approval process | /add-workflow |
+| Add a step before publishing the process | /add-step |
+| Freeze the approval sequence for use | /publish-workflow |
+| Record an internal request | /add-request |
+| Begin an approval sequence | /submit |
+| Record the assigned reviewer decision | /decide |
+| Hand the pending decision to another reviewer | /reassign |
+| Record the next purpose and retention review | /review-data |
+| Record an operator note | /log |
+| Draft a follow-up for an overdue request | /draft-chase |
+| Draft the decision record | /draft-decision |
+| Bring a Kissflow report CSV across | /import |
+| Export all records and history | /export |
+| Change a field or rule | /customise |
+| Add a read-only report | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+One CLI: scripts/workflow.mjs. Every command accepts --json. Read docs/cli.md for arguments. All coding runtimes use the same .claude/commands/ library. AGENTS.md points here.
 
-## Hard rules
-
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Kissflow.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/kissflow
+Omni by Enterprise DNA installs, customises and runs this system. https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=kissflow&utm_medium=instructions
