@@ -1,3 +1,7 @@
+---
+description: "Review completed request turnaround"
+---
+
 # Review completed request turnaround
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

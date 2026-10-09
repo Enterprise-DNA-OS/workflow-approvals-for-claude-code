@@ -1,3 +1,7 @@
+---
+description: "Prepare the weekly approval meeting"
+---
+
 # Prepare the weekly approval meeting
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

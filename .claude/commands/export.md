@@ -1,3 +1,7 @@
+---
+description: "Export all records and history"
+---
+
 # Export all records and history
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

@@ -1,3 +1,7 @@
+---
+description: "Record the next purpose and retention review"
+---
+
 # Record the next purpose and retention review
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

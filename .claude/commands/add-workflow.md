@@ -1,3 +1,7 @@
+---
+description: "Define a new approval process"
+---
+
 # Define a new approval process
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

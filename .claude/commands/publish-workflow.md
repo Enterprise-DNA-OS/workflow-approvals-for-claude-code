@@ -1,3 +1,7 @@
+---
+description: "Freeze the approval sequence for use"
+---
+
 # Freeze the approval sequence for use
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

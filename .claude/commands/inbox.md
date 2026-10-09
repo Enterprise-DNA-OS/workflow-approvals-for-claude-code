@@ -1,3 +1,7 @@
+---
+description: "Review decisions waiting for an owner"
+---
+
 # Review decisions waiting for an owner
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

@@ -1,3 +1,7 @@
+---
+description: "Find overdue approvals, stale drafts and unreviewed imports"
+---
+
 # Find overdue approvals, stale drafts and unreviewed imports
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

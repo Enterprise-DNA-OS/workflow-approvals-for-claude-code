@@ -1,3 +1,7 @@
+---
+description: "Record an internal request"
+---
+
 # Record an internal request
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

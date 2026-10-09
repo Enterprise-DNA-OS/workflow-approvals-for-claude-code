@@ -42,13 +42,13 @@ function need(o,k){if(typeof o[k]!=='string'||!o[k].trim())throw Error(`Required
 function date(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s)||Number.isNaN(Date.parse(s))||new Date(s).toISOString().slice(0,10)!==s)throw Error('Use a real YYYY-MM-DD date');return s;}
 async function one(db,kind,value,lock=false){
  const allowed={workflows:'name',requests:'title'};const col=allowed[kind];if(!col)throw Error('Invalid record kind');
- const all=await db.query(`select * from ${kind} order by ${col},id${lock?' for update':''}`);
+ const all=await db.query(`select * from ${kind} order by ${col},id`);
  const norm=value.toLowerCase();let hits=all.filter(r=>r.id===value||r[col].toLowerCase()===norm);if(hits.length!==1)hits=all.filter(r=>r.id.startsWith(norm)||r[col].toLowerCase().includes(norm));
- if(hits.length!==1)throw Error(`${hits.length?'Ambiguous':'No match'} ${kind}: ${value}. Candidates: ${hits.map(r=>`${r.id} ${r[col]}`).join('; ')||all.map(r=>`${r.id} ${r[col]}`).join('; ')}`);return hits[0];
+ if(hits.length!==1)throw Error(`${hits.length?'Ambiguous':'No match'} ${kind}: ${value}. Candidates: ${hits.map(r=>`${r.id} ${r[col]}`).join('; ')||all.map(r=>`${r.id} ${r[col]}`).join('; ')}`);return lock?(await db.query(`select * from ${kind} where id=$1 for update`,[hits[0].id]))[0]:hits[0];
 }
 const actorSame=(a,b)=>a.trim().toLowerCase()===b.trim().toLowerCase();
 async function event(db,actor,action,detail,r=null,w=null){await db.query('insert into activity(actor,action,detail,request_id,workflow_id) values($1,$2,$3,$4,$5)',[actor,action,JSON.stringify(detail),r,w]);}
-async function transaction(db,fn,rollback=false){await db.exec('BEGIN');try{const v=await fn();await db.exec(rollback?'ROLLBACK':'COMMIT');return v;}catch(e){await db.exec('ROLLBACK');throw e;}}
+async function transaction(db,fn,rollback=false,readOnly=false){await db.exec(readOnly?'BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY':'BEGIN');try{const v=await fn();await db.exec(rollback?'ROLLBACK':'COMMIT');return v;}catch(e){await db.exec('ROLLBACK');throw e;}}
 async function detail(db,value){const r=await one(db,'requests',value);return{request:r,tasks:await db.query('select * from tasks where request_id=$1 order by position',[r.id]),history:await db.query('select actor,action,detail,created_at from activity where request_id=$1 order by created_at,id',[r.id])};}
 export async function execute(db,args){
  const{command:c,o}=parseArgs(args);
@@ -59,7 +59,7 @@ export async function execute(db,args){
  if(c==='history')return(await detail(db,need(o,'request'))).history;
  if(c==='weekly-review')return{inbox:await db.query(reads.inbox),attention:await db.query(reads.attention),workload:await db.query(reads.workload),compliance:await db.query(reads.compliance)};
  if(c==='export'){
-  const data={format:'workflow-approvals-v1',exported_at:new Date().toISOString()};for(const t of ['workflows','step_definitions','requests','tasks','activity'])data[t]=await db.query(`select * from ${t} order by id`);
+  const data=await transaction(db,async()=>{const snapshot={format:'workflow-approvals-v1',exported_at:new Date().toISOString()};for(const t of ['workflows','step_definitions','requests','tasks','activity'])snapshot[t]=await db.query(`select * from ${t} order by id`);return snapshot;},false,true);
   const file=path.resolve(need(o,'file'));fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n',{flag:'wx',mode:0o600});return[{file,requests:data.requests.length}];
  }
  if(c.startsWith('draft-')){

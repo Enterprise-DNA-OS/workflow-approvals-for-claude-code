@@ -73,6 +73,6 @@ brand.json controls logo, colours and business name. npm run docs creates decisi
 
 ## Verification
 
-npm test uses a temporary database, exercises every command and checks sequential decisions, rejection, self-approval refusal, immutable history, dry runs, rollback, repeat imports, custom headings, ambiguity, branded documents and JSON exports. CI defines Windows and Linux runs plus an empty disposable Postgres database. Local verification results are recorded in docs/verification.md.
+npm test uses a temporary database, exercises every command and checks sequential decisions, rejection, self-approval refusal, immutable history, dry runs, rollback, repeat imports, custom headings, ambiguity, branded documents and JSON exports. CI defines Windows and Linux runs plus an empty disposable Postgres database. Cross-platform verification results are recorded in docs/verification.md.
 
 MIT licence. Not affiliated with Kissflow or Anthropic. Hosting and coding-agent usage carry their own costs. [Research](docs/research.md). [Book 30 minutes with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=kissflow&utm_medium=readme).

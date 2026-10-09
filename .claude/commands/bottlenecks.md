@@ -1,3 +1,7 @@
+---
+description: "Find the process steps holding work"
+---
+
 # Find the process steps holding work
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

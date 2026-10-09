@@ -1,3 +1,7 @@
+---
+description: "Balance pending decisions by reviewer"
+---
+
 # Balance pending decisions by reviewer
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

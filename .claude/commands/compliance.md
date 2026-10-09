@@ -1,3 +1,7 @@
+---
+description: "Check retention reviews and internal approval controls"
+---
+
 # Check retention reviews and internal approval controls
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.

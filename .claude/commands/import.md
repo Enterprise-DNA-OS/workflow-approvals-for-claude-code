@@ -1,3 +1,7 @@
+---
+description: "Bring a Kissflow report CSV across"
+---
+
 # Bring a Kissflow report CSV across
 
 Read CLAUDE.md first. Use the real names and arguments supplied by the operator. Never invent a record or evidence.
